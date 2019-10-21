@@ -1,0 +1,163 @@
+<nav class="navbar navbar-dark bg-dark">
+	<span class="navbar-brand mb-0 h1"> <%= image_tag("cu_logo.png", :alt => "Carleton University Logo", :style => "height:2rem") %> cuScheduling</span>
+</nav>
+
+<section class="top">
+	<section class="jumbotron text-center">
+		<div class="container main-text">
+			<h1 class="jumbotron-heading display-3">Welcome to cuScheduling</h1>
+		</div>
+
+		<div class="container sub-text">
+			<p class="lead text-muted">a simple schedule generator for Carleton University students</p>
+		</div>
+	</section>
+
+	<%= form_for :classes, url: root_path do |f| %>
+		<input type="hidden" name="form" value="generate">
+		<section class="container text-center">
+			<div class="row container-form text-center options">
+				
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="exampleFormControlSelect1"><h3 class="white-font display-4">Term</h3></label>
+							<select class="form-control" name="term" id="exampleFormControlSelect1">
+								<option>Fall</option>
+								<option>Winter</option>
+								<option>Summer</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="col-md-4 courses">
+						<label for="course1"><h3 class="white-font display-4">Courses</h3></label>
+
+						<%# <input id="course1" class="form-control" type="text" value = "" name="course1" placeholder="Enter your first course code here">
+						<input class="form-control" type="text" value = "" name="course2" >
+						<input class="form-control" type="text" value = "" name="course3" >
+						<input class="form-control" type="text" value = "" name="course4" >
+						<input class="form-control" type="text" value = "" name="course5" > %>
+						<%# Add class="form-control !!" %>
+						<%= f.text_field :class1 %>
+						<%= f.text_field :class2 %>
+						<%= f.text_field :class3 %>
+						<%= f.text_field :class4 %>
+						<%= f.text_field :class5 %>
+					</div>
+
+					<%# <div class="col-md-4">
+						<label for="break"><h3 class="white-font">Time of break (leave blank for no prefence)</h3></label>
+						<input class="form-control" type="time" value="" name="break" min="8:30" max="20:00">
+						<label id="time-preference-label" for="time-preference"><h3 class="white-font">Preferred class time</h3></label>
+						<select class="form-control" name="time-preference" id="time-preference">
+							<option>No Preference</option>
+							<option>Morning</option>
+							<option>Afternoon</option>
+							<option>Evening</option>
+						</select>
+					</div> %>
+
+					<div class="col-md-4">
+						<label for="submit"><h3 class="white-font display-4">Generate</h3></label>
+						<section class="container sub-button">
+							<button type="submit" value="submit" class="btn btn-dark"><h3 class="white-font display-4 form-button">Start!</h3></button>
+						</section>
+					</div>
+
+			</div>
+		</section>
+		<hr>
+	<% end %>
+</section> <!--End the top-->
+
+<div class="schedule-box">
+
+<div class="cd-schedule loading">
+	<div class="timeline">
+		<ul>
+			<li><span>08:00</span></li>
+			<li><span>08:30</span></li>
+			<li><span>09:00</span></li>
+			<li><span>09:30</span></li>
+			<li><span>10:00</span></li>
+			<li><span>10:30</span></li>
+			<li><span>11:00</span></li>
+			<li><span>11:30</span></li>
+			<li><span>12:00</span></li>
+			<li><span>12:30</span></li>
+			<li><span>13:00</span></li>
+			<li><span>13:30</span></li>
+			<li><span>14:00</span></li>
+			<li><span>14:30</span></li>
+			<li><span>15:00</span></li>
+			<li><span>15:30</span></li>
+			<li><span>16:00</span></li>
+			<li><span>16:30</span></li>
+			<li><span>17:00</span></li>
+			<li><span>17:30</span></li>
+			<li><span>18:00</span></li>
+			<li><span>19:00</span></li>
+			<li><span>20:00</span></li>
+			<li><span>21:00</span></li>
+		</ul>
+	</div> <!-- .timeline -->
+
+	<div class="events">
+		<ul>
+			{% for day in days %}
+			<li class="events-group">
+				<div class="top-info"><span>{{ day }}</span></div>
+
+				<ul>
+					{% for course in schedule %}
+
+					{% if day in course.day %}
+					<li class="single-event" data-start={{ course.startTime[0]|string + ":" + course.startTime[1]|string }} 
+						data-end={{ course.endTime[0]|string + ":" + course.endTime[1]|string }} 
+						data-content={{ course.location }}
+						data-event={{ "event-" + course.color|string }}>
+						<a>
+							<em class="event-name">{{ course.name }}</em>
+						</a>
+					</li>
+					{% endif %}
+
+					{% endfor %}
+
+				</ul>
+			</li>
+			{% endfor %}
+
+		</ul>
+	</div> <!--close events-->
+
+	<div class="text-center">
+		<div class="prev-button">
+			<form method="post">
+				<input type="hidden" name="form" value="previous">
+				<button type="submit" class="btn btn-dark">Previous schedule</button>
+			</form>
+		</div>
+		<div class="next-button">
+			<form method="post">
+				<input type="hidden" name="form" value="next">
+				<button type="submit" class="btn btn-dark">New schedule</button>
+			</form>
+		</div>
+	</div>
+
+</div> <!--close cd-schedule-->
+</div> <!-- close schedule box-->
+
+<!--<script src="static/js/modernizr.js"></script>-->
+<p>Test info: <%= @submitted %></p>
+
+<script language="javascript">
+	console.log(<%= @lec_size %>,<%= @tut_size %>);
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- <script src="static/js/main.js"></script> <!-- Resource jQuery --> -->

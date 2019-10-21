@@ -1,0 +1,20 @@
+<h1><%= @title %></h1>
+<p>Please enter the form below</p>
+
+<%= form_for :classes, url: root_path do |f| %><br>
+	<p>
+		<%= f.label :class %><br>
+		<%= f.text_field :class %>
+	</p>
+
+	<p>
+		<%= f.submit %>
+	</p>
+<% end %>
+
+<p>You submitted <%= @submitted %></p>
+<p>A lecture <%= @some_lecture %></p>
+
+<p>There are<%= @lec_size %>lectures and <%= @tut_size%> tutorials</p>
+
+##############
