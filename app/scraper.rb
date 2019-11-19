@@ -4,7 +4,8 @@ def scrape
 	Tutorial.connection
 
 	days = ["Mon","Tue","Wed","Thu","Fri"]
-	class_type = ["Lecture","Tutorial","Labratory"] #add more later
+	lecture_group = ["Lecture","Seminar","Research Essay"]
+	tutorial_group = ["Tutorial","Laboratory","Discussion Group","Problem Analysis",] #add more later
 	terms_list = ["Winter","Summer","Fall"]
 	
 	#Browser
@@ -62,31 +63,42 @@ def scrape
 
 			table = Nokogiri::HTML(c_page.body).xpath("//table[@width='883']")[1]
 
-			course_pos = [0]
+			course_pos = []
 			all_tr = table.xpath("tr")
 			all_tr.pop #removes last empty tr
 
 			all_tr.each_with_index do |tr,index|
-				if tr.xpath("td").length == 1 then course_pos.push(index+1) end
+				#if tr.xpath("td").length == 1 then course_pos.push(index+1) end
+				first_td = tr.xpath("td")[0]
+				if first_td.to_s[0...30] == '<td align="center" width="5%">' then course_pos.push(index) end
 			end
 
+			#puts course.to_s
+
 			course_pos.each do |index|
-				begin
-					info1 = all_tr[index].xpath("td")
+
+				#first line
+				info1 = all_tr[index].xpath("td")
+
+				if info1.size < 10 then next end
+				info1 = info1.map do |s| 
+					s = s.text.to_s.tr("\n","")
+				end
+				status = info1[1]
+				course_name = info1[3].tr(" ","")
+				section = info1[4]
+				course_type = info1[7]
+				prof = info1[10]
+
+				#second line
+				course_days = ""
+				if all_tr[index+1] !=nil
 					info2 = all_tr[index+1].content.to_s
 
-					#info1 = line1.xpath("td")
-					if info1.size < 10 then next end
-					info1 = info1.map do |s| 
-						s = s.text.to_s.tr("\n","")
+					unless info2.include? "Meeting Date"
+						next
 					end
-					course_name = info1[3].tr(" ","")
-					section = info1[4]
-					course_type = info1[7]
-					prof = info1[10]
 
-					#info2 = line2.content.to_s
-					course_days = ""
 					days.each do |day|
 						if info2.include? day then course_days += day + " " end
 					end
@@ -94,26 +106,45 @@ def scrape
 					start_time = time_str[0]
 					end_time = time_str[2]
 
-					location = info2.split("Building: ")[1]
-					#puts "\t"+course_name
+					location = info2.split("Building: ")[1].chomp("\n")
 
+					if start_time == "Building:"
+						start_time = "NA"
+						end_time = "NA"
+					end
+
+					if location == " Room:"
+						location = "NA"
+					end
+
+				#no info on that line found
+				elsif all_tr[index+1] == nil
+					start_time = "NA"
+					end_time = "NA"
+					location = "NA"
+					puts "no info for: " + course_name 
+				end
+			
+				#third line
+				also_reg = "";
+				if(all_tr[index+2] != nil)
 					info3 = all_tr[index+2].xpath("td");
-					also_reg = "";
+
 					if info3.length > 1 and info3[1].content.to_s.include? "Also Register in:"
 						also_reg = info3[1].content.to_s
-						also_reg = also_reg.split("Register in:")[1][1...-1]
+						also_reg = also_reg.split("Register in:")[1]#[1...-1]
 					end
-					#$num_classes += 1
-
-					if course_type == "Lecture" || course_type == "Seminar"
-						lecture = Lecture.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location,also_reg:also_reg)
+				end
+					
+				#commit to DB
+				if status != "Registration Closed" and status != "Waitlist Full" and status != "Full, No Waitlist"
+					if lecture_group.include? course_type or also_reg == "" #any class with no tutorial will be considered a lecture type
+						lecture = Lecture.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location,also_reg:also_reg,status:status)
 						lecture.save
-					elsif course_type == "Tutorial" or course_type == "Laboratory"
-						tutorial = Tutorial.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location)
+					elsif tutorial_group.include? course_type
+						tutorial = Tutorial.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location,status:status)
 						tutorial.save
 					end
-				rescue
-					puts "error getting a course here, skipped class: "
 				end
 
 			end

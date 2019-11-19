@@ -24,8 +24,13 @@ Main Components
 
 -------------------------------- */
 .schedule-box {
-  height: 600px;
+  height: 100vh;
+  /* height: 600px; */
   font-size: calc(1.6rem*0.6);
+}
+
+.top{
+	/* height: 100vh; */
 }
 
 .cd-schedule {
@@ -43,7 +48,7 @@ Main Components
   .cd-schedule {
     width: 90%;
     max-width: 1200px;
-    margin: 2em auto;
+    margin: 40px auto;
   }
   .cd-schedule::after {
     clear: both;
@@ -66,11 +71,11 @@ Main Components
     top: 0;
     left: 0;
     width: 100%;
-    padding-top: calc(600px/24);
+    padding-top: calc(85vh/29);
   }
   .cd-schedule .timeline li {
     position: relative;
-    height: calc(600px/24);
+    height: calc(85vh/29);
   }
   .cd-schedule .timeline li::after {
     /* this is used to create the table horizontal lines */
@@ -153,7 +158,7 @@ Main Components
   -ms-flex-negative: 0;
     flex-shrink: 0;
   float: left;
-  height: calc(600px/24*3);
+  height: calc(85vh/29*3);
   width: 70%;
   max-width: 300px;
   box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
@@ -196,7 +201,7 @@ Main Components
   .cd-schedule .events .top-info {
     /* vertically center its content */
     display: table;
-    height: calc(600px/24);
+    height: calc(85vh/29);
     border-bottom: 1px solid #EAEAEA;
     /* reset style */
     padding: 0;
@@ -212,7 +217,7 @@ Main Components
     margin-bottom: 0;
   }
   .cd-schedule .events .events-group > ul {
-    height: 600px;
+    height: 85vh;
     /* reset style */
     display: block;
     /*overflow: visible;*/
@@ -242,7 +247,7 @@ Main Components
     margin-right: 0;
   }
   .cd-schedule .events .single-event a {
-    padding: calc(1.2em*0.6);
+    padding: 2px calc(1.2em*0.3);
   }
   .cd-schedule .events .single-event:last-of-type {
     /* reset style */
@@ -268,6 +273,10 @@ Main Components
   opacity: 0;
 }
 
+.cd-schedule{
+    /* top: 25%; */
+}
+
 .cd-schedule .event-name,
 .cd-schedule .event-date {
   display: block;
@@ -279,6 +288,7 @@ Main Components
 
 .cd-schedule .event-name {
   font-size: calc(2.4rem*0.6);
+  margin-top: -5px;
 }
 
 @media only screen and (min-width: 800px) {
@@ -292,13 +302,13 @@ Main Components
   font-size: calc(1.4rem*0.6);
   opacity: .7;
   line-height: 1.2;
-  margin-bottom: .2em;
+  margin-bottom: 0;
 }
 
 .cd-schedule .single-event[data-event="event-1"],
 .cd-schedule [data-event="event-1"] .header-bg {
   /* this is used to set a background color for the event and the modal window */
-  background: #4F7772;
+  background: #ff6361;
 }
 
 /*.cd-schedule .single-event[data-event="event-1"]:hover {
@@ -307,7 +317,7 @@ Main Components
 
 .cd-schedule .single-event[data-event="event-2"],
 .cd-schedule [data-event="event-2"] .header-bg {
-  background: #8DA865;
+  background: #58508d;
 }
 
 /*.cd-schedule .single-event[data-event="event-2"]:hover {
@@ -316,7 +326,7 @@ Main Components
 
 .cd-schedule .single-event[data-event="event-3"],
 .cd-schedule [data-event="event-3"] .header-bg {
-  background: #E89C64;
+  background: #003f5c;
 }
 
 /*.cd-schedule .single-event[data-event="event-3"]:hover {
@@ -325,7 +335,7 @@ Main Components
 
 .cd-schedule .single-event[data-event="event-4"],
 .cd-schedule [data-event="event-4"] .header-bg {
-  background: #D57145;
+  background: #bc5090;
 }
 
 /*.cd-schedule .single-event[data-event="event-4"]:hover {
@@ -334,7 +344,7 @@ Main Components
 
 .cd-schedule .single-event[data-event="event-5"],
 .cd-schedule [data-event="event-5"] .header-bg {
-  background: #D25744;
+  background: #c28616;
 }
 
 .cd-schedule .event-modal {
@@ -590,7 +600,8 @@ Main Components
 }
 
 .form-button{
-	font-size: 2rem !important
+	font-size: 2rem !important;
+	margin-bottom: 0 !important;
 }
 
 .cd-schedule .cover-layer {
@@ -617,27 +628,37 @@ Main Components
 
 .navbar {
   margin-bottom: 0;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 
 .navbar-brand{
-  padding-left: 2rem;
+  padding-left: 20px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .options{
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding-top: calc(0.2*(100vh - 590px)); 
+  padding-bottom: calc(0.2*(100vh - 590px));
   width: 100%;
 }
 
 .sub-button{
 	padding-top: 0.6rem;
-  padding-bottom: 2rem;
+  	padding-bottom: 2rem;
+}
+
+.checkbox-form{
+	padding-left: 40px;
 }
 
 form{
   background: #b13939;
+}
+
+.term-box{
+	margin-top: 0.6rem;
 }
 
 /* #form-text{
@@ -650,26 +671,64 @@ form{
 
 .prev-button,.next-button{
   margin-top: 1rem;
+  padding-top: 2rem;
   display: inline-block;
 }
+
+.cycle-div{
+	/* margin-top: 1rem;
+	padding-top: 2rem; */
+	height: 40px;
+	width: 40px;
+	display: inline-block;
+}
+
+.cycle-button{
+	height: 40px;
+	width: 40px;
+	box-shadow: none !important;
+	border-color: white !important;
+}
+
+/* .prev-button{
+	float: left;
+}
+
+.next-button{
+	float: left;
+} */
 
 .white-font{
   font-size: 1rem;
   color: white;
 }
 
+.option-header{
+	font-size: 52px !important;
+	line-height: 1 !important;
+}
+
 .jumbotron {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  margin-bottom: 0;
+  padding-top: calc(0.3*(100vh - 590px)) !important;
+  padding-bottom: calc(0.3*(100vh - 590px)) !important;
+  margin-bottom: 30px !important;
 }
 
 .courses .form-control{
   margin: 0.5rem;
 }
 
+.col-md-4{
+	min-height: 320px !important;
+  	max-height: 320px;
+}
+
 #course1{
   margin-top: 0;
+}
+
+#firstBox{
+	margin-top: 0.6rem;
 }
 
 .jumbotron p:last-child {
@@ -686,10 +745,6 @@ form{
 
 .jumbotron .main-text{
   margin-bottom: 2rem;
-}
-
-.top{
-  height:100%;
 }
 
 .album {
@@ -716,12 +771,15 @@ form{
 }
 
 footer {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
   bottom: 0;
-  background-color: grey;
+  height: 60px;
+  background-color: #f5f5f5;
 }
 
-footer p {
-  margin-bottom: .25rem;
+footer > .container{
+	display: block;
+	height: 60px;
+	padding-left: 30px;
+	padding-top: 15px;
 }
+

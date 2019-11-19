@@ -1,5 +1,5 @@
 <nav class="navbar navbar-dark bg-dark">
-	<span class="navbar-brand mb-0 h1"> <%= image_tag("cu_logo.png", :alt => "Carleton University Logo", :style => "height:2rem") %> cuScheduling</span>
+	<span class="navbar-brand mb-0 h1"> <%= image_tag("cu_logo.png", :alt => "Carleton University Logo", :style => "height:40px") %> cuScheduling</span>
 </nav>
 
 <section class="top">
@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="container sub-text">
-			<p class="lead text-muted">a simple schedule generator for Carleton University students</p>
+			<p class="lead text-muted">A simple schedule generator for Carleton University students.</p>
 		</div>
 	</section>
 
@@ -20,17 +20,17 @@
 				
 					<div class="col-md-4">
 						<div class="form-group">
-							<label for="exampleFormControlSelect1"><h3 class="white-font display-4">Term</h3></label>
-							<select class="form-control" name="term" id="exampleFormControlSelect1">
-								<option>Fall</option>
-								<option>Winter</option>
-								<option>Summer</option>
+							<label for="exampleFormControlSelect1"><h3 class="white-font display-4 option-header">Term</h3></label>
+							<select class="form-control term-box" name="term" id="exampleFormControlSelect1">
+								<option <%if @last_term == "Summer" %><%="selected"%><% end %> value="Summer">Summer 2019</option>
+								<option <%if @last_term == "Fall" %><%="selected"%><% end %> value="Fall">Fall 2019</option>
+								<option <%if @last_term == "Winter" %><%="selected"%><% end %> value="Winter">Winter 2020</option>
 							</select>
 						</div>
 					</div>
 
 					<div class="col-md-4 courses">
-						<label for="course1"><h3 class="white-font display-4">Courses</h3></label>
+						<label for="course1"><h3 class="white-font display-4 option-header">Courses</h3></label>
 
 						<%# <input id="course1" class="form-control" type="text" value = "" name="course1" placeholder="Enter your first course code here">
 						<input class="form-control" type="text" value = "" name="course2" >
@@ -38,11 +38,12 @@
 						<input class="form-control" type="text" value = "" name="course4" >
 						<input class="form-control" type="text" value = "" name="course5" > %>
 						<%# Add class="form-control !!" %>
-						<%= f.text_field :class1 %>
-						<%= f.text_field :class2 %>
-						<%= f.text_field :class3 %>
-						<%= f.text_field :class4 %>
-						<%= f.text_field :class5 %>
+						<%= f.text_field :class1, :class => 'form-control', :value => @last_classes["class1"], :placeholder => "Enter your course codes, ie BIOL1010", :id => "firstBox" %>
+						<%= f.text_field :class2, :class => 'form-control', :value => @last_classes["class2"] %>
+						<%= f.text_field :class3, :class => 'form-control', :value => @last_classes["class3"] %>
+						<%= f.text_field :class4, :class => 'form-control', :value => @last_classes["class4"] %>
+						<%= f.text_field :class5, :class => 'form-control', :value => @last_classes["class5"] %>
+						<%# <p class="white-font">Do not enter tutorials, labs, or sections</p> %>
 					</div>
 
 					<%# <div class="col-md-4">
@@ -58,10 +59,25 @@
 					</div> %>
 
 					<div class="col-md-4">
-						<label for="submit"><h3 class="white-font display-4">Generate</h3></label>
-						<section class="container sub-button">
-							<button type="submit" value="submit" class="btn btn-dark"><h3 class="white-font display-4 form-button">Start!</h3></button>
-						</section>
+						<label for="submit"><h3 class="white-font display-4 option-header">Generate</h3></label>
+						<div class="form-inline checkbox-form">
+							<div class="custom-control custom-checkbox my-1 mr-sm-2">
+								<input name="waitlistCheckbox" type="checkbox" class="custom-control-input" id="waitlistCheckbox">
+								<label class="custom-control-label lead white-font" for="waitlistCheckbox">Include Waitlisted Classes</label>
+							</div>
+							<div class="custom-control custom-checkbox my-1 mr-sm-2">
+								<input name="dayOffCheckbox" type="checkbox" class="custom-control-input" id="dayOffCheckbox">
+								<label class="custom-control-label lead white-font" for="dayOffCheckbox">Prioritize Day Off</label>
+							</div>
+							<div class="custom-control custom-checkbox my-1 mr-sm-2">
+								<input name="minTimeCheckbox" type="checkbox" class="custom-control-input" id="minTimeCheckbox">
+								<label class="custom-control-label lead white-font" for="minTimeCheckbox">Minimize time between classes</label>
+							</div>
+							
+							<section class="container sub-button">
+								<button type="submit" value="submit" class="btn btn-dark"><h3 class="white-font display-4 form-button">Start!</h3></button>
+							</section>
+						</div>
 					</div>
 
 			</div>
@@ -96,68 +112,163 @@
 			<li><span>17:00</span></li>
 			<li><span>17:30</span></li>
 			<li><span>18:00</span></li>
+			<li><span>18:30</span></li> 
 			<li><span>19:00</span></li>
+			<li><span>19:30</span></li>
 			<li><span>20:00</span></li>
+			<li><span>20:30</span></li>
 			<li><span>21:00</span></li>
+			<li><span>21:30</span></li>
+			<li><span>22:00</span></li>
 		</ul>
 	</div> <!-- .timeline -->
 
 	<div class="events">
 		<ul>
-			{% for day in days %}
+			<% @days.each do |day| %>
+			<% shortDay = day[0...3]%>
 			<li class="events-group">
-				<div class="top-info"><span>{{ day }}</span></div>
+				<div class="top-info"><span><%= day %></span></div>
 
 				<ul>
-					{% for course in schedule %}
+				<% s_num = 0 %>
+				<% @schedules.each do |schedule| %>
+					<% if schedule.length != 0 then schedule = schedule[:blocks] end%>
+					<% schedule.each do |course| %>
 
-					{% if day in course.day %}
-					<li class="single-event" data-start={{ course.startTime[0]|string + ":" + course.startTime[1]|string }} 
-						data-end={{ course.endTime[0]|string + ":" + course.endTime[1]|string }} 
-						data-content={{ course.location }}
-						data-event={{ "event-" + course.color|string }}>
-						<a>
-							<em class="event-name">{{ course.name }}</em>
-						</a>
-					</li>
-					{% endif %}
+						<% if course[:days].to_s.include? shortDay %>
+						<% start_time = timeToString(course[:s_time]) %>
+						<% end_time = timeToString(course[:e_time]) %>
+						<li class="single-event <%= "s-"+s_num.to_s %>" data-start= <%= start_time %> 
+												 data-end= <%= end_time %>
+												 data-event="event-<%= course[:colour] %>">
+							<a>
+								<span class="event-date"><%= start_time + " - " + end_time + " " + course[:status]%></span>
+								<em class="event-name"><%= course[:name] + course[:section] %></em>
+								<!-- > <em class="event-date"><%= course[:location] %></em> --> 
+							</a>
+						</li>
+						<% end %>
 
-					{% endfor %}
+					<% end %>
+					<% s_num += 1 %>
+					<% end %>
 
 				</ul>
 			</li>
-			{% endfor %}
+			<% end %>
 
 		</ul>
 	</div> <!--close events-->
 
+	<% btn_num = 0 %>
 	<div class="text-center">
-		<div class="prev-button">
-			<form method="post">
+		<%# <div class="prev-button">
+			
 				<input type="hidden" name="form" value="previous">
-				<button type="submit" class="btn btn-dark">Previous schedule</button>
-			</form>
+				<button id="prev-button"  type="submit" class="btn btn-dark">Prev schedule</button>
+			
 		</div>
 		<div class="next-button">
-			<form method="post">
+			
 				<input type="hidden" name="form" value="next">
-				<button type="submit" class="btn btn-dark">New schedule</button>
-			</form>
+				<button id="next-button" type="submit" class="btn btn-dark">Next schedule</button>
+			
+		</div>
+		<div class="bottom-info">
+			<h3 class="display-4 bottom-text">Cycle through schedule options with previous and next button, or scroll up to make a new search<h3>
+		</div> %>
+		<div class="prev-button">			
+			<button id="prev-button"  type="submit" class="btn btn-dark">Prev schedule</button>
+		</div>
+
+		<% @schedules.each do |s|%>
+			<% if s == [] then next end %>
+			<div class="cycle-div">
+				<button id="btn-<%= btn_num %>" onClick=showCurrent(<%= btn_num %>) type="submit" class="btn btn-dark cycle-button"><%= btn_num + 1%></button>
+			</div>
+			<% btn_num += 1 %>
+		<% end %>
+
+		<div class="next-button">			
+			<button id="next-button" type="submit" class="btn btn-dark">Next schedule</button>			
 		</div>
 	</div>
 
 </div> <!--close cd-schedule-->
+<footer class=footer>
+		<div class="container">
+			<span class="text-muted">© 2019. Made by Tobias Schlagenhaufer.</span>
+		</div>
+	</footer>
 </div> <!-- close schedule box-->
 
 <!--<script src="static/js/modernizr.js"></script>-->
-<p>Test info: <%= @submitted %></p>
 
 <script language="javascript">
-	console.log(<%= @lec_size %>,<%= @tut_size %>);
+	var showNum = 0
+	var maxNum = <%= @schedules.length %>
+	var scroll = <%= @winScroll %>
+	var error_msg = "<%= @error_msg %>"
+
+	error_msg = error_msg.replace(/%error%/g,"\n");
+
+	window.onload = function(){
+		let bottom = document.body.scrollHeight/2 - 20 //account for footer
+		if(scroll){
+			window.scrollTo(0,bottom);
+		}
+
+		setTimeout(function() {
+			if(error_msg != ""){
+				alert(error_msg);
+			}
+		}, 20);
+	}
+
+	// console.log('<%= @some_tut %>');
+	function showCurrent(btn_num) {
+		showNum = btn_num;
+		for(let i=0; i<maxNum ; i++){
+			current_classes = document.getElementsByClassName("s-"+i);
+			buttons = document.getElementById("btn-"+i);
+			if(i == btn_num){
+				toggle = 'visible'
+				buttons.style.background = "#b13939"
+			}
+			else{
+				toggle = 'hidden'
+				buttons.style.background = "#343a40"
+			}
+			for(c_class of current_classes){
+				c_class.style.visibility = toggle;
+			}
+		}
+	}
+
+	document.getElementById("next-button").addEventListener('click',function(){
+		showNum ++;
+		if(showNum >= maxNum){
+			showNum = 0;
+		}
+		showCurrent(showNum)
+	});
+
+	document.getElementById("prev-button").addEventListener('click',function(){
+		showNum --;
+		if(showNum < 0){
+			showNum = maxNum-1;
+		}
+		showCurrent(showNum)
+	});
+	if(maxNum > 0){
+		showCurrent(0)
+	}
 </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<!-- <script src="static/js/main.js"></script> <!-- Resource jQuery --> -->
+<%= javascript_include_tag('schedule_jq.js') %>
+<%# <script src="app/assets/javascripts/main.js"></script> <!-- Resource jQuery --> %>
