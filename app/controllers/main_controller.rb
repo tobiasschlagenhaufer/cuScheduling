@@ -40,6 +40,8 @@ class MainController < ApplicationController
 		if params["term"] != nil
 			@last_term = params["term"]
 		end
+
+		@all_lec = Lecture.all.size
 	end
 	
 end
