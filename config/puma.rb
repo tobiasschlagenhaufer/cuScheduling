@@ -36,16 +36,16 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 
 
 
-require "rufus/scheduler"
-scheduler = Rufus::Scheduler.new
-UpdateCoursesJob.perform_later
-scheduler.cron '0 4 * * *' do
-	begin
-		UpdateCoursesJob.perform_later
-	rescue
-		puts "no work"
-	end
-end
+# require "rufus/scheduler"
+# scheduler = Rufus::Scheduler.new
+# UpdateCoursesJob.perform_later
+# scheduler.cron '0 4 * * *' do
+# 	begin
+# 		UpdateCoursesJob.perform_later
+# 	rescue
+# 		puts "no work"
+# 	end
+# end
 
 
 

@@ -12,7 +12,20 @@ module CuScheduling
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+	# -- all .rb files in that directory are automatically loaded.
+	
+	config.after_initialize do
+		require "rufus/scheduler"
+		scheduler = Rufus::Scheduler.new
+		UpdateCoursesJob.perform_later
+		scheduler.cron '0 4 * * *' do
+			begin
+				UpdateCoursesJob.perform_later
+			rescue
+				puts "no work"
+			end
+		end
+	end
 
   end
 end
