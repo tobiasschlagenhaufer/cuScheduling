@@ -1,24 +1,14 @@
-# README
+# cuScheduling
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The Carleton Student Timetable Generator
 
-Things you may want to cover:
+visit www.cuscheduling.net 
 
-* Ruby version
+Versioning
+* Ruby 2.3.3
+* Rails 5.0.1
 
-* System dependencies
 
-* Configuration
+Developed and mainted by Tobias Schlagenhaufer
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+If you have any questions or would like to report a bug, email me at tobiasschlagenhaufer@cmail.carleton.ca
