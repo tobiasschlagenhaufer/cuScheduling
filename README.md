@@ -1,10 +1,12 @@
-#cuScheduling
+# cuScheduling
 
 The Carleton Student Timetable Generator
-*Ruby 2.3.3
-*Rails 5.0.1
 
 visit www.cuscheduling.net 
+
+Versioning
+* Ruby 2.3.3
+* Rails 5.0.1
 
 
 Developed and mainted by Tobias Schlagenhaufer
