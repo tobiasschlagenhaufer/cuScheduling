@@ -4,9 +4,9 @@ class MainController < ApplicationController
 	def index
 		require "./app/genSchedule.rb"
 
-		@default_classes = {"class1" => "", "class2" => "","class3" => "","class4" => "", "class6" => ""}
+		@default_classes = {"class1" => "", "class2" => "","class3" => "","class4" => "", "class5" => "","class6" => ""}
 		@last_classes = ""
-		@last_term = "Fall"
+		@last_term = "Winter"
 		if @scheduleNum == nil then @scheduleNum = 0 end
 
 		checkParams = []

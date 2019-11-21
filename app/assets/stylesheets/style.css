@@ -639,7 +639,7 @@ Main Components
 }
 
 .options{
-  padding-top: calc(0.2*(100vh - 590px)); 
+  padding-top: calc(0.2*(100vh - 650px)); 
   padding-bottom: calc(0.2*(100vh - 590px));
   width: 100%;
 }
