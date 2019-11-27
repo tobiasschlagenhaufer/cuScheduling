@@ -20,6 +20,7 @@ def scrape
 		page = br.get(url)
 	rescue => error
 		puts "Error accessing carleton page, "
+		sleep(2)
 		#!! add protection from network error, abort or timeout, add timer delay
 		scrape
 		return
