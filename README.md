@@ -1,6 +1,6 @@
 # cuScheduling
 
-The Carleton Student Timetable Generator
+The Carleton Student Timetable Generator - Now with SSL certificates!
 
 visit www.cuscheduling.net 
 
