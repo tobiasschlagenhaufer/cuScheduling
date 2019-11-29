@@ -16,6 +16,6 @@ Documentation
 * Capistrano 3.11
 
 
-Developed and mainted by Tobias Schlagenhaufer
+Developed by Tobias Schlagenhaufer
 
 If you have any questions or would like to report a bug, email me at tobiasschlagenhaufer@cmail.carleton.ca
