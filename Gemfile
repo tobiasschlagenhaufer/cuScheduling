@@ -55,6 +55,7 @@ gem 'nokogiri'
 gem 'rufus-scheduler'
 gem 'mechanize'
 gem 'whenever'
+gem 'amoeba'
 
 gem 'capistrano', '~> 3.11'
 gem 'capistrano-rails', '~> 1.4'

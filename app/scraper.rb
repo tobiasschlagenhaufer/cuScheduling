@@ -1,5 +1,6 @@
 def scrape
 	require 'mechanize'
+	require 'amoeba'
 	Lecture.connection
 	Tutorial.connection
 
@@ -154,6 +155,8 @@ def scrape
 		end
 	
 	end	
+	
+
  
 end
 

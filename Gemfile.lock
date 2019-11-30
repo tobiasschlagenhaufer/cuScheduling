@@ -42,6 +42,8 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
+    amoeba (3.1.0)
+      activerecord (>= 3.2.6)
     arel (8.0.0)
     bindex (0.8.1)
     builder (3.2.3)
@@ -236,6 +238,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  amoeba
   byebug
   capistrano (~> 3.11)
   capistrano-passenger (~> 0.2.0)

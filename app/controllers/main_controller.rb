@@ -41,7 +41,8 @@ class MainController < ApplicationController
 			@last_term = params["term"]
 		end
 
-		@all_lec = Lecture.all.size
+		@all_lec = 0
+		if($current_l_record) then @all_lec = $current_l_record.all.size end
 	end
 	
 end

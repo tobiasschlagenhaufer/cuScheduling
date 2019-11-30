@@ -38,11 +38,9 @@ def generateSchedule(classes,term,rankItems)
 	#query to get each course
 	requestedCourses.each do |lec_name|
 		current_lecs = Lecture.where(name: lec_name, term: term)
-		p current_lecs
 
 		#check if lecture exists
 		if current_lecs.size == 0
-			puts "skipping" 
 			err_msg += "Course " + lec_name + " is closed or does not exist!%error%"
 			next 
 		end
@@ -85,8 +83,6 @@ def generateSchedule(classes,term,rankItems)
 					tut = parts[1].tr(" ","")
 					tut.split("or")
 				end
-
-				p tut_query
 
 				#go through each tutorial queried
 				tut_query.each_with_index do |query,index|
@@ -180,7 +176,7 @@ def generateSchedule(classes,term,rankItems)
 					end
 
 				end
-				p tutorialMatrix
+
 				for tutorial in tutorialMatrix
 					editSection = section
 					editSection[:tutorials] = "" #free some memory in tutorial array (not needed anymore)
@@ -209,8 +205,6 @@ def generateSchedule(classes,term,rankItems)
 	for point in combinationMatrix
 		point.flatten!
 	end
-
-	puts combinationMatrix.length
 
 	### save schedules with NO conflictions ###
 
@@ -261,9 +255,6 @@ def generateSchedule(classes,term,rankItems)
 		end
 
 	end
-
-	#puts possibleSchedules
-	puts possibleSchedules.length
 
 	for rankItem in rankItems
 		if rankItem == "day_off" 
