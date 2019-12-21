@@ -96,6 +96,12 @@ def scrape
 				if all_tr[index+1] !=nil
 					info2 = all_tr[index+1].content.to_s
 
+					#error checking
+					if info2.split("Time: ")[1] == nil then 
+						break
+					end
+					if info2.split("Building: ")[1] == nil then break end
+
 					unless info2.include? "Meeting Date"
 						next
 					end
@@ -103,6 +109,8 @@ def scrape
 					days.each do |day|
 						if info2.include? day then course_days += day + " " end
 					end
+
+
 					time_str = info2.split("Time: ")[1].split(" ")
 					start_time = time_str[0]
 					end_time = time_str[2]
