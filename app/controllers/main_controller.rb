@@ -41,7 +41,7 @@ class MainController < ApplicationController
 			@last_term = params["term"]
 		end
 
-		@last_update = $updated_at
+		@last_update = $updated
 	end
 	
 end

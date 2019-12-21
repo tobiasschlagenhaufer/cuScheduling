@@ -8,6 +8,8 @@ class UpdateCoursesJob < ApplicationJob
 	#perform a transaction which only modifies the record after completion
 	ActiveRecord::Base.transaction do
 		scrape
+		$updated = Time.now
 	end
+
   end
 end

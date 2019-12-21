@@ -154,9 +154,5 @@ def scrape
 		end
 	
 	end	
-
-
-	$updated_at = Time.now
-
  
 end
