@@ -50,12 +50,9 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #gems added by Toby
-gem 'httparty'
 gem 'nokogiri'
 gem 'rufus-scheduler'
 gem 'mechanize'
-gem 'whenever'
-gem 'amoeba'
 
 gem 'capistrano', '~> 3.11'
 gem 'capistrano-rails', '~> 1.4'

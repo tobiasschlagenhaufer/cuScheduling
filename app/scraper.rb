@@ -1,6 +1,5 @@
 def scrape
 	require 'mechanize'
-	require 'amoeba'
 	Lecture.connection
 	Tutorial.connection
 
@@ -155,15 +154,9 @@ def scrape
 		end
 	
 	end	
-	
+
+
+	$updated_at = Time.now
 
  
 end
-
-# start = Time.now
-# $num_classes = 0
-# scrape
-# finish = Time.now
-
-# puts "took: " + (finish - start).to_s
-# puts "average of " + ((finish - start)/$num_classes).to_s + " seconds per class"

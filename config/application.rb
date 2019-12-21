@@ -15,10 +15,11 @@ module CuScheduling
 	# -- all .rb files in that directory are automatically loaded.
 	
 	config.after_initialize do
+		$updated_at = "NA"
 		UpdateCoursesJob.perform_later
 
 		scheduler = Rufus::Scheduler.new 
-		scheduler.every "0.5d" do #also scrape every day
+		scheduler.every "3h" do #also scrape every day
 		begin
 			UpdateCoursesJob.perform_later
 		rescue
