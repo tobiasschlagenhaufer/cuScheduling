@@ -41,7 +41,7 @@ class MainController < ApplicationController
 			@last_term = params["term"]
 		end
 
-		@last_update = $updated
+		@last_update = Lecture.first.updated_at
 	end
 	
 end

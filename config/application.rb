@@ -13,18 +13,19 @@ module CuScheduling
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
 	# -- all .rb files in that directory are automatically loaded.
+	config.time_zone = 'Eastern Time (US & Canada)'
 	
 	config.after_initialize do
 		UpdateCoursesJob.perform_later
 
 		scheduler = Rufus::Scheduler.new 
-		scheduler.every "3h" do #also scrape every day
-		begin
-			UpdateCoursesJob.perform_later
-		rescue
-			puts "Error scraping data"
+		scheduler.interval "3h" do #also scrape every day
+			begin
+				UpdateCoursesJob.perform_later
+			rescue
+				puts "Error scraping data"
+			end
 		end
-	end
 	end
 
   end

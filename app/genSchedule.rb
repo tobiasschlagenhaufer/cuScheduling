@@ -41,8 +41,26 @@ def generateSchedule(classes,term,rankItems)
 
 		#check if lecture exists
 		if current_lecs.size == 0
-			err_msg += "Course " + lec_name + " is closed or does not exist!%error%"
+			err_msg += "Course " + lec_name + " does not exist!%error%"
 			next 
+		end
+
+		#filter out closed
+		current_lecs = current_lecs.to_a.delete_if { |lecture| !waitlisted and lecture[:status] == "Registration Closed"}
+
+		#if now empty, means we only had closed sections
+		if current_lecs.size == 0
+			err_msg += "All sections for " + lec_name + " are closed!%error%"
+			next
+		end
+
+		#filter out waitlist full, full no waitlist
+		current_lecs = current_lecs.to_a.delete_if { |lecture| !waitlisted and (lecture[:status] == "Waitlist Full" or lecture[:status] == "Full, No Waitlist")}
+
+		#if now empty, means we only had full sections
+		if current_lecs.size == 0
+			err_msg += "All sections for " + lec_name + " are full!%error%"
+			next
 		end
 
 		#filter out waitlisted

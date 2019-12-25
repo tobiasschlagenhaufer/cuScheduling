@@ -40,13 +40,11 @@ def scrape
 		term_name = terms_list[(term.value[4].to_i) -1]
 		puts term_name
 
-		#if term_name == "Summer" then next end
-
 		search_form = search_page.forms.first
 		#search_form['sel_levl'] = "UG"
 
 		numOption = search_form.field_with(:id => "subj_id").options.length
-		#puts numOption
+		puts numOption
 
 		(numOption-1).times do |i|
 
@@ -54,7 +52,7 @@ def scrape
 			search_form.field_with(:id => 'subj_id').options[i+1].click
 			
 			curr_class = "looking at "+search_form.field_with(:id => 'subj_id').options[i+1].value 
-			#puts curr_class
+			puts curr_class
 
 			c_page = search_form.submit
 
@@ -74,33 +72,27 @@ def scrape
 				if first_td.to_s[0...30] == '<td align="center" width="5%">' then course_pos.push(index) end
 			end
 
-			#puts course.to_s
-
+			print course_pos
+			
 			course_pos.each do |index|
-
+				
 				#first line
 				info1 = all_tr[index].xpath("td")
-
-				if info1.size < 10 then next end
+		
 				info1 = info1.map do |s| 
 					s = s.text.to_s.tr("\n","")
 				end
+			
 				status = info1[1]
 				course_name = info1[3].tr(" ","")
 				section = info1[4]
 				course_type = info1[7]
 				prof = info1[10]
-
+				
 				#second line
 				course_days = ""
 				if all_tr[index+1] !=nil
-					info2 = all_tr[index+1].content.to_s
-
-					#error checking
-					if info2.split("Time: ")[1] == nil then 
-						break
-					end
-					if info2.split("Building: ")[1] == nil then break end
+					info2 = all_tr[index+1].xpath("td")[1].content.to_s
 
 					unless info2.include? "Meeting Date"
 						next
@@ -110,22 +102,21 @@ def scrape
 						if info2.include? day then course_days += day + " " end
 					end
 
-
-					time_str = info2.split("Time: ")[1].split(" ")
-					start_time = time_str[0]
-					end_time = time_str[2]
-
-					location = info2.split("Building: ")[1].chomp("\n")
-
-					if start_time == "Building:"
+					if info2.include? "Time: "
+						time_str = info2.split("Time: ")[1].split(" ")
+						start_time = time_str[0]
+						end_time = time_str[2]
+					else
 						start_time = "NA"
 						end_time = "NA"
 					end
 
-					if location == " Room:"
+					if info2.include? "Building: " 
+						location = info2.split("Building: ")[1].chomp("\n")
+					else
 						location = "NA"
 					end
-
+					
 				#no info on that line found
 				elsif all_tr[index+1] == nil
 					start_time = "NA"
@@ -146,7 +137,7 @@ def scrape
 				end
 					
 				#commit to DB
-				if status != "Registration Closed" and status != "Waitlist Full" and status != "Full, No Waitlist"
+				#if status != "Registration Closed" and status != "Waitlist Full" and status != "Full, No Waitlist"
 					if lecture_group.include? course_type or also_reg == "" #any class with no tutorial will be considered a lecture type
 						lecture = Lecture.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location,also_reg:also_reg,status:status)
 						lecture.save
@@ -154,7 +145,7 @@ def scrape
 						tutorial = Tutorial.create(name:course_name,section:section,term:term_name,days:course_days,s_time:start_time,e_time:end_time,location:location,status:status)
 						tutorial.save
 					end
-				end
+				#end
 
 			end
 			
