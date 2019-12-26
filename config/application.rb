@@ -18,7 +18,7 @@ module CuScheduling
 		UpdateCoursesJob.perform_later
 
 		scheduler = Rufus::Scheduler.new 
-		scheduler.interval "3h" do #also scrape every day
+		scheduler.interval "15m" do #also scrape every day
 			begin
 				UpdateCoursesJob.perform_later
 			rescue
