@@ -106,9 +106,14 @@ def scrape
 						time_str = info2.split("Time: ")[1].split(" ")
 						start_time = time_str[0]
 						end_time = time_str[2]
+
+						#error check
+						if start_time == nil or end_time == nil then next end
+
 					else
-						start_time = "NA"
-						end_time = "NA"
+						# start_time = "NA"
+						# end_time = "NA"
+						next
 					end
 
 					if info2.include? "Building: " 
@@ -119,10 +124,8 @@ def scrape
 					
 				#no info on that line found
 				elsif all_tr[index+1] == nil
-					start_time = "NA"
-					end_time = "NA"
-					location = "NA"
 					puts "no info for: " + course_name 
+					next
 				end
 			
 				#third line
