@@ -22,6 +22,7 @@
 						<div class="form-group">
 							<label for="exampleFormControlSelect1"><h3 class="white-font display-4 option-header">Term</h3></label>
 							<select class="form-control term-box" name="term" id="exampleFormControlSelect1">
+								<%# Build this automatically from template in the future %>
 								<option <%if @last_term == "Fall" %><%="selected"%><% end %> value="Fall">Fall 2019</option>
 								<option <%if @last_term == "Winter" %><%="selected"%><% end %> value="Winter">Winter 2020</option>
 								<option <%if @last_term == "Summer" %><%="selected"%><% end %> value="Summer">Summer 2020</option>
