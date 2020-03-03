@@ -128,13 +128,15 @@ GEM
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
     nio4r (2.5.1)
-    nokogiri (1.10.8)
+
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    nokogiri (1.10.8-x86-mingw32)
+    nokogiri (1.10.9-x86-mingw32)
+
       mini_portile2 (~> 2.4.0)
     ntlm-http (0.1.1)
     public_suffix (4.0.1)
-    puma (3.12.3)
+    puma (3.12.4)
     raabro (1.1.6)
     rack (2.0.8)
     rack-test (1.1.0)
