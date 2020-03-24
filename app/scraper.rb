@@ -29,11 +29,9 @@ def scrape
 	#clear db when connection is established
 	Lecture.delete_all
 	Tutorial.delete_all
+	TERMS.clear
 
 	form = page.forms.first
-
-	# array we'll use to populate our terms on front end
-	active_terms = {}
 
 	##stuff from here
 	for term in form.field_with(:name => 'term_code').options
@@ -43,9 +41,7 @@ def scrape
 
 		term_name = terms_list[(term.value[4].to_i) -1]
 
-		# add to our active terms
-		active_terms[term_name] = term.text.to_s
-		p(active_terms)
+		TERMS[term_name] = term.text.to_s
 
 		search_form = search_page.forms.first
 
@@ -161,6 +157,4 @@ def scrape
 		end
 	
 	end	
-	# add terms here
-	Terms::List.data = active_terms
 end

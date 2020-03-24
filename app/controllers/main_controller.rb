@@ -4,7 +4,7 @@ class MainController < ApplicationController
 	def index
 		require "./app/genSchedule.rb"
 
-		@term_hash = Terms::List.data
+		@term_hash = TERMS
 		@term_warnings = {}
 		@term_hash.each do |key,val|
 			@term_warnings[key] = Lecture.find_by status: 'Open'
