@@ -1,7 +1,7 @@
 module Terms
 	class List
 		def self.data
-			@@data
+			@@data = {}
 		end
 
 		def self.data=something
