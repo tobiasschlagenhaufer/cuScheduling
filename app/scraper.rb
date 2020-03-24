@@ -32,19 +32,24 @@ def scrape
 
 	form = page.forms.first
 
+	# array we'll use to populate our terms on front end
+	active_terms = {}
+
 	##stuff from here
 	for term in form.field_with(:name => 'term_code').options
 		form['term_code'] = term
+		
 		search_page = form.submit
 
 		term_name = terms_list[(term.value[4].to_i) -1]
-		puts term_name
+
+		# add to our active terms
+		active_terms[term_name] = term.text.to_s
+		p(active_terms)
 
 		search_form = search_page.forms.first
-		#search_form['sel_levl'] = "UG"
 
 		numOption = search_form.field_with(:id => "subj_id").options.length
-		puts numOption
 
 		(numOption-1).times do |i|
 
@@ -156,5 +161,6 @@ def scrape
 		end
 	
 	end	
- 
+	# add terms here
+	Terms::List.data = active_terms
 end

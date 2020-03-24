@@ -4,9 +4,15 @@ class MainController < ApplicationController
 	def index
 		require "./app/genSchedule.rb"
 
+		@term_hash = Terms::List.data
+		@term_warnings = {}
+		@term_hash.each do |key,val|
+			@term_warnings[key] = Lecture.find_by status: 'Open'
+		end
+
 		@default_classes = {"class1" => "", "class2" => "","class3" => "","class4" => "", "class5" => "","class6" => ""}
 		@last_classes = ""
-		@last_term = "Winter"
+		@last_term = @term_hash.keys[0]
 		if @scheduleNum == nil then @scheduleNum = 0 end
 
 		checkParams = []
@@ -21,7 +27,7 @@ class MainController < ApplicationController
 			@last_classes = @default_classes
 		end
 
-		genReturn = generateSchedule(params[:classes],params["term"],checkParams)
+		genReturn = generateSchedule(params[:classes],params["course_term"],checkParams)
 		@schedules = genReturn[0]
 		@error_msg = genReturn[1]
 		
@@ -37,8 +43,8 @@ class MainController < ApplicationController
 		@days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 
 		#save term
-		if params["term"] != nil
-			@last_term = params["term"]
+		if params["course_term"] != nil
+			@last_term = params["course_term"]
 		end
 
 		@last_update = Lecture.first.updated_at

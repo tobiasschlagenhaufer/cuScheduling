@@ -4,4 +4,6 @@ Rails.application.routes.draw do
 	root 'main#index'
 
 	post '/' => 'main#index'
+	get '/courses.json' => 'courses#index'
+	get '/courses' => 'courses#index'
 end

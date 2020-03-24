@@ -14,3 +14,6 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += %w( schedule_jq.js )
+Rails.application.config.assets.precompile += %w( jquery-3.0.0.min.js )
+Rails.application.config.assets.precompile += %w( jquery-ui.min.js )
+Rails.application.config.assets.precompile += %w( jquery-ui.min.css )

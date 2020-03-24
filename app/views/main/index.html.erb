@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="container sub-text">
-			<p class="lead text-muted">A simple schedule generator for Carleton University students.</p>
+			<p class="lead text-muted">A simple schedule generator for Carleton University students. Enter your term and courses, then hit start.</p>
 		</div>
 	</section>
 
@@ -21,30 +21,50 @@
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="exampleFormControlSelect1"><h3 class="white-font display-4 option-header">Term</h3></label>
-							<select class="form-control term-box" name="term" id="exampleFormControlSelect1">
+							<select class="form-control term-box" name="course_term" id="exampleFormControlSelect1">
 								<%# Build this automatically from template in the future %>
-								<option <%if @last_term == "Fall" %><%="selected"%><% end %> value="Fall">Fall 2019</option>
-								<option <%if @last_term == "Winter" %><%="selected"%><% end %> value="Winter">Winter 2020</option>
-								<option <%if @last_term == "Summer" %><%="selected"%><% end %> value="Summer">Summer 2020</option>
+								
+								<%@term_hash.each do |term, val| %>
+									<option 
+										<%if @last_term == term%>
+											<%="selected"%>
+										<% end %> 
+											
+										value="<%=term%>" class="
+											
+										<%if @term_warnings[term] == nil%>
+											<%="warned"%>
+										<%end%>">
+											
+										<%=val%>
+
+									</option>
+								<%end%>
 							</select>
+						</div>
+						<div class="text-left">
+							<p id="term-warning" style="color:white;"></p>
 						</div>
 					</div>
 
 					<div class="col-md-4 courses">
 						<label for="course1"><h3 class="white-font display-4 option-header">Courses</h3></label>
 
+						<label data-toggle="tooltip" data-placement="top" title="No need to enter your tutorials, we've got that covered!">
+							<svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 24 24" width="30"><path d="M5 5h12V19H5z" fill="white"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+						</label>
 						<%# <input id="course1" class="form-control" type="text" value = "" name="course1" placeholder="Enter your first course code here">
 						<input class="form-control" type="text" value = "" name="course2" >
 						<input class="form-control" type="text" value = "" name="course3" >
 						<input class="form-control" type="text" value = "" name="course4" >
 						<input class="form-control" type="text" value = "" name="course5" > %>
 						<%# Add class="form-control !!" %>
-						<%= f.text_field :class1, :class => 'form-control', :value => @last_classes["class1"], :placeholder => "Enter your course codes, ie CHEM1006", :id => "firstBox" %>
-						<%= f.text_field :class2, :class => 'form-control', :value => @last_classes["class2"] %>
-						<%= f.text_field :class3, :class => 'form-control', :value => @last_classes["class3"] %>
-						<%= f.text_field :class4, :class => 'form-control', :value => @last_classes["class4"] %>
-						<%= f.text_field :class5, :class => 'form-control', :value => @last_classes["class5"] %>
-						<%= f.text_field :class6, :class => 'form-control', :value => @last_classes["class6"] %>
+						<%= f.text_field :class1, :class => ['form-control', 'autocomplete'], :value => @last_classes["class1"], :placeholder => "Enter your course codes, ie CHEM1006", :id => "firstBox" %>
+						<%= f.text_field :class2, :class => 'form-control autocomplete', :value => @last_classes["class2"] %>
+						<%= f.text_field :class3, :class => 'form-control autocomplete', :value => @last_classes["class3"] %>
+						<%= f.text_field :class4, :class => 'form-control autocomplete', :value => @last_classes["class4"] %>
+						<%= f.text_field :class5, :class => 'form-control autocomplete', :value => @last_classes["class5"] %>
+						<%= f.text_field :class6, :class => 'form-control autocomplete', :value => @last_classes["class6"] %>
 						<%# <p class="white-font">Do not enter tutorials, labs, or sections</p> %>
 					</div>
 
@@ -208,6 +228,7 @@
 <!--<script src="static/js/modernizr.js"></script>-->
 
 <script language="javascript">
+
 	var showNum = 0
 	var maxNum = <%= @schedules.length %>
 	var scroll = <%= @winScroll %>
@@ -267,9 +288,71 @@
 	if(maxNum > 0){
 		showCurrent(0)
 	}
+
+	// autocomplete tings
+	$(function() {
+		// Below is the name of the textfield that will be autocomplete    
+		$('.autocomplete').autocomplete({
+ 			// This shows the min length of charcters that must be typed before the autocomplete looks for a match.
+      		minLength: 1,
+ 			// This is the source of the auocomplete suggestions. In this case a list of names from the people controller, in JSON format.
+			source: function(request, response) {
+				$.ajax({
+					url: '<%= courses_path(:json) %>',
+					dataType: "json",
+					data: {
+						course : request.term,
+						term : $("select[name='course_term'").val()
+					},
+					success: function(data) {
+						response(data);
+					}
+				});
+			}
+  			// This updates the textfield when you move the updown the suggestions list, with your keyboard. In our case it will reflect the same value that you see in the suggestions which is the person.given_name.
+				// focus: function(event, ui) {
+				// 	$(this).val(ui.item.name);
+				// 	return false;
+				// },
+				// // Once a value in the drop down list is selected, do the following:
+				// select: function(event, ui) {
+				// 	// place the person.given_name value into the textfield called 'select_origin'...
+				// 	// $(this).val(ui.item.name);
+				// 	return "hello"
+				// }
+		})
+
+		// The below code is straight from the jQuery example. It formats what data is displayed in the dropdown box, and can be customized.
+		// .data( "autocomplete" )._renderItem = function( ul, item ) {
+		// 	console.log(item)
+		// 	return $( "<li></li>" )
+		// 			.data( "item.autocomplete", item.name )
+		// 			// For now which just want to show the person.given_name in the list.
+		// 			.append( "<a>" + item.name + "</a>" )
+		// 			.appendTo( ul );
+		// }
+	});
+
+	// change term warning on change of select box
+	$("select[name='course_term']").on('change',function(){
+		if($("select[name='course_term'] option:selected").hasClass("warned")){
+			$("#term-warning").text("Warning! All classes for the selected term are closed.");
+		}else{
+			$("#term-warning").text("");
+		}
+	});
+	//call the first time
+	$("select[name='course_term']").trigger('change');
+
+	// init tooltips
+	$(function () {
+  		$('[data-toggle="tooltip"]').tooltip()
+	});
 </script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+<%= javascript_include_tag 'jquery-3.0.0.min.js', 'jquery-ui.min.js' %>
+<%# <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 

@@ -17,6 +17,7 @@ module CuScheduling
  	config.active_record.default_timezone = :local # Or :utc
 	
 	config.after_initialize do
+		# comment out to stop rewriting db
 		UpdateCoursesJob.perform_later
 
 		scheduler = Rufus::Scheduler.new 
