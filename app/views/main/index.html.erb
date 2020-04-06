@@ -302,7 +302,8 @@
 					dataType: "json",
 					data: {
 						course : request.term,
-						term : $("select[name='course_term'").val()
+						term : $("select[name='course_term'").val(),
+						auto : true
 					},
 					success: function(data) {
 						response(data);
