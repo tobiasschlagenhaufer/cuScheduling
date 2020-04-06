@@ -26,7 +26,7 @@ class CoursesController < ApplicationController
 			print(query.join(" and"))
 			
 			# @courses = Lecture.where(["name like ? and status like ? and term = ? and location like ?","#{subject}%","#{sub_status}","#{term}","#{location}"]).limit(10)
-			@courses = Lecture.where(["#{query.join(" and")}"]).limit(100).pluck(:name,:section,:days,:s_time,:e_time,:location,:status,:term)
+			@courses = Lecture.where(["#{query.join(" and")}"]).limit(100).select(:name,:section,:days,:s_time,:e_time,:location,:status,:term)
 
 		end
 		
