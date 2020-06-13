@@ -72,6 +72,12 @@ def generateSchedule(classes,term,rankItems)
 			next
 		end
 
+		#check if no date/time for classes
+		if current_lecs.first.days == "NA" or current_lecs[0].s_time == "NA"
+			err_msg += "Course " + lec_name + " has no avialable date or time, and will not be added to your schedule%error%"
+			next
+		end
+
 		#lecture exists, create a spot
 		lectureArr.append([])
 

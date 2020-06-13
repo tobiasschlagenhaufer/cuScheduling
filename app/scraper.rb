@@ -103,18 +103,25 @@ def scrape
 						if info2.include? day then course_days += day + " " end
 					end
 
+					if course_days == ""
+						course_days = "NA"
+					end
+
 					if info2.include? "Time: "
 						time_str = info2.split("Time: ")[1].split(" ")
 						start_time = time_str[0]
 						end_time = time_str[2]
 
 						#error check
-						if start_time == nil or end_time == nil then next end
+						if start_time == nil or end_time == nil 
+							start_time = "NA"
+							end_time = "NA"
+						end
 
 					else
-						# start_time = "NA"
-						# end_time = "NA"
-						next
+						start_time = "NA"
+						end_time = "NA"
+						# next
 					end
 
 					if info2.include? "Building: " 
