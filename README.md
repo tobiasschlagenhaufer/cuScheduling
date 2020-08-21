@@ -6,7 +6,11 @@ The Carleton Student Timetable Generator - Build your schedule at the click of a
 :-------------------------:|:-------------------------:
  ![alt-1](cus_1.png "schedule-1") | ![alt-2](cus_2.png "schedule-2")
 
-visit www.cuscheduling.net 
+visit www.cuscheduling.net
+
+# Architecture Design
+
+![alt-3](cuscheduling_architecture.png "architecture diagram")
 
 # Courses API
 www.cuscheduling.net/courses.json
