@@ -3,6 +3,9 @@ def scrape
 	Lecture.connection
 	Tutorial.connection
 
+	Lecture.connection.execute("BEGIN TRANSACTION; END;")
+	Lecture.connection.execute("BEGIN TRANSACTION; END;")
+
 	days = ["Mon","Tue","Wed","Thu","Fri"]
 	lecture_group = ["Lecture","Seminar","Research Essay"]
 	tutorial_group = ["Tutorial","Laboratory","Discussion Group","Problem Analysis",] #add more later
