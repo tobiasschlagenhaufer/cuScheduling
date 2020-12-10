@@ -17,6 +17,8 @@ module CuScheduling
 	# -- all .rb files in that directory are automatically loaded.
 	config.time_zone = 'Eastern Time (US & Canada)'
  	config.active_record.default_timezone = :local # Or :utc
+
+	ActiveRecord::Base.connection.execute("BEGIN TRANSACTION; END;")
 	
 	config.after_initialize do
 		# comment out to stop rewriting db
