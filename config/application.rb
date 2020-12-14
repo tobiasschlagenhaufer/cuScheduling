@@ -19,10 +19,10 @@ module CuScheduling
  	config.active_record.default_timezone = :local # Or :utc
 	
 	config.after_initialize do
-		# comment out to stop rewriting db
-		UpdateCoursesJob.perform_later
 		ActiveRecord::Lecture.connection.execute("BEGIN TRANSACTION; END;")
 		ActiveRecord::Tutorial.connection.execute("BEGIN TRANSACTION; END;")
+		# comment out to stop rewriting db
+		UpdateCoursesJob.perform_later
 
 		scheduler = Rufus::Scheduler.new 
 		scheduler.interval "3h" do #also scrape every day
