@@ -21,6 +21,8 @@ module CuScheduling
 	config.after_initialize do
 		# comment out to stop rewriting db
 		UpdateCoursesJob.perform_later
+		ActiveRecord::Lecture.connection.execute("BEGIN TRANSACTION; END;")
+		ActiveRecord::Tutorial.connection.execute("BEGIN TRANSACTION; END;")
 
 		scheduler = Rufus::Scheduler.new 
 		scheduler.interval "3h" do #also scrape every day
