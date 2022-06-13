@@ -7,7 +7,7 @@ class CreateLectures < ActiveRecord::Migration[5.1]
       t.string :days
       t.string :s_time
       t.string :e_time
-	  t.string :location
+	    t.string :location
 
       t.timestamps
     end

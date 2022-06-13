@@ -50,7 +50,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #gems added by Toby
-gem 'nokogiri'
+gem 'nokogiri', '~> 1.13'
 gem 'rufus-scheduler'
 gem 'mechanize'
 
