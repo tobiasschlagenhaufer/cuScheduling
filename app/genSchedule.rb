@@ -18,8 +18,8 @@ def generateSchedule(classes,term,rankItems)
 	if(classes == nil) then return defaultReturn end
 	
 	requestedCourses = []
-	for course in classes
-		input = classes[course].tr(" ","").upcase
+	classes.each_value do |course|
+		input = course.delete(" ").upcase
 		if input != "" and classes[course] != "Enter your first course here"
 			if !requestedCourses.include? input
 				requestedCourses.append(input)
