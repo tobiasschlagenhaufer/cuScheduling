@@ -29,7 +29,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: api
           push: true
           tags: |
             ghcr.io/eggo-plant/cuscheduling/rails:latest
