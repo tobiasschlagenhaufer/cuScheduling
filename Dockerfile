@@ -1,4 +1,4 @@
-FROM ruby:3.0.5
+FROM timbru31/ruby-node:3.0-slim-16
 
 WORKDIR /usr/src/app
 
