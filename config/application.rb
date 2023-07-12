@@ -32,5 +32,7 @@ module CuScheduling
 		end
 	end
 
+	config.hosts << "cuscheduling.carletoncomputerscience.ca"
+
   end
 end
